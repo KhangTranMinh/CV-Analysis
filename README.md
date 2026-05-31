@@ -1,73 +1,69 @@
-# React + TypeScript + Vite
+# CV Analysis
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web app that parses a CV, visualizes skill proficiency levels, compares them against an expert benchmark, and provides a prioritized growth plan.
 
-Currently, two official plugins are available:
+> **Demo mode** — AI parsing is mocked; the app always returns a Mobile Developer profile. Designed so a real AI backend can be swapped in later without changing UI code.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Quick Start
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+npm install
+npm run dev      # dev server at http://localhost:5173
+npm run build    # production build
+npm run lint     # ESLint check
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Tech Stack
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Layer | Choice |
+|-------|--------|
+| Framework | React 18 + TypeScript (strict) |
+| UI | MUI (Material UI) v9 |
+| Build | Vite |
+| Backend | None (all data mocked client-side) |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project Structure
+
 ```
+src/
+  types/                          # TypeScript interfaces (Skill, CVProfile, GrowthSuggestion)
+  data/                           # Mock data
+    mockUserProfile.ts            #   Junior Mobile Developer (3 yrs, 8 skills)
+    mockExpertProfile.ts          #   Senior Mobile Developer (8 yrs, 10 skills)
+  services/                       # Business logic
+    cvParserService.ts            #   CV parser (mock, behind ICVParserService interface)
+    suggestionService.ts          #   Gap analysis & priority sorting
+  theme/
+    theme.ts                      # MUI theme (colors, typography, shape)
+  components/
+    FileUpload/                   # Drag-and-drop PDF upload with validation
+    SkillBar/                     # Color-coded horizontal proficiency bar
+    SkillDashboard/               # Skills grouped by category + profile card
+    ComparisonView/               # Dual-bar user vs expert overlay
+    GrowthPlan/                   # Prioritized suggestion cards
+  App.tsx                         # Stepper shell (Upload -> Skills -> Compare -> Growth)
+  main.tsx                        # Entry point (ThemeProvider + CssBaseline)
+```
+
+## Core Components
+
+| Component | Purpose |
+|-----------|---------|
+| **FileUpload** | Drag-and-drop zone + file picker. Validates PDF type and 5 MB size limit. Shows file info and triggers mock parsing with a loading spinner. |
+| **SkillBar** | Single horizontal `LinearProgress` bar. Color-coded by level: red (1-3), amber (4-6), green (7-10). |
+| **SkillDashboard** | Displays the parsed profile — role, experience, and skills grouped by category. Each group renders `SkillBar` items. |
+| **ComparisonView** | Overlays user (blue) and expert (grey) bars per skill. Shows `+N` gap badges and a "Missing Skills" section for skills the user lacks. |
+| **GrowthPlan** | Renders prioritized suggestion cards (High/Medium/Low). Each card shows current vs target level and an actionable tip. Summary banner at top. |
+
+## User Flow
+
+```
+Upload CV  -->  Parsing (mock)  -->  Skills Overview  -->  Expert Comparison  -->  Growth Plan
+```
+
+Navigated via an MUI Stepper. Back button on every step; "Start Over" on the final step.
+
+## Documentation
+
+- [Product Requirements](docs/REQUIREMENT.md)
+- [Implementation Plan](docs/IMPLEMENTATION_PLAN.md)
