@@ -34,7 +34,8 @@ export default function FileUpload({ onParseComplete }: FileUploadProps) {
 
   const validateAndSetFile = useCallback((f: File) => {
     setError(null);
-    if (f.type !== "application/pdf") {
+    const isPdf = f.type === "application/pdf" || f.name.toLowerCase().endsWith(".pdf");
+    if (!isPdf) {
       setError("Only PDF files are accepted.");
       return;
     }

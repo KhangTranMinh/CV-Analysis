@@ -5,4 +5,22 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   base: '/CV-Analysis/',
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://yyjex83jyiw4.asuscomm.com:7299',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
+  preview: {
+    proxy: {
+      '/api': {
+        target: 'http://yyjex83jyiw4.asuscomm.com:7299',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
+  },
 })
