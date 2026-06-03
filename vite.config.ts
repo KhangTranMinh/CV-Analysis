@@ -8,7 +8,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://yyjex83jyiw4.asuscomm.com:7299',
+        target: 'https://yyjex83jyiw4.asuscomm.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
@@ -17,7 +17,7 @@ export default defineConfig({
   preview: {
     proxy: {
       '/api': {
-        target: 'http://yyjex83jyiw4.asuscomm.com:7299',
+        target: 'https://yyjex83jyiw4.asuscomm.com',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },

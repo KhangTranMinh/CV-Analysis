@@ -9,7 +9,9 @@ export interface ICVParserService {
   parse(file: File): Promise<CVProfile>;
 }
 
-const API_URL = "/api/completion";
+const API_URL = import.meta.env.DEV
+  ? "/api/completion"
+  : "https://yyjex83jyiw4.asuscomm.com/completion";
 const API_KEY = "sk-llama-61468520f7299d6bb0e57e00dcc943b6";
 
 const VALID_CATEGORIES = new Set([
